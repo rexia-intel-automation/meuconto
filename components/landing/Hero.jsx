@@ -31,7 +31,7 @@ export default function Hero() {
           <div className="mt-16 bg-white rounded-2xl shadow-2xl p-8 max-w-2xl mx-auto">
             <div className="text-8xl mb-4">📚</div>
             <p className="text-gray-600 italic">
-              "Uma forma incrível de tornar a leitura ainda mais especial para as crianças!"
+              &ldquo;Uma forma incrível de tornar a leitura ainda mais especial para as crianças!&rdquo;
             </p>
           </div>
         </div>
