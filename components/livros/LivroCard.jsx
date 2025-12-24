@@ -17,6 +17,7 @@ export default function LivroCard({ livro }) {
         {/* Thumbnail/Capa */}
         <div className="w-full h-48 rounded-lg overflow-hidden bg-gradient-to-br from-primary via-accent to-secondary flex items-center justify-center">
           {livro.thumbnail ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={livro.thumbnail}
               alt={livro.titulo}

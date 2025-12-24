@@ -113,6 +113,7 @@ export default function FileUpload({
         </div>
       ) : (
         <div className="relative rounded-xl overflow-hidden border-2 border-gray-300">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={preview}
             alt="Preview"
