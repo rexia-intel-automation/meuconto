@@ -1,1 +1,1167 @@
+# Prompt para Claude Code - Meu Conto MVP
 
+## Descrição do Projeto
+
+**Meu Conto** é uma plataforma de geração automatizada de livros ilustrados infantis personalizados usando inteligência artificial.
+
+O usuário preenche um formulário com informações sobre a história desejada (nome do personagem, tema, idade, etc.) e o sistema gera automaticamente um livro infantil completo em HTML com narrativa e ilustrações criadas por IA.
+
+**Este NÃO é um gerenciador de biblioteca virtual** - é um gerador de conteúdo personalizado onde cada livro é criado do zero pela plataforma.
+
+---
+
+## Objetivo
+
+Criar aplicação Next.js 14+ (App Router) com as seguintes páginas:
+1. **Landing Page** - apresentação do produto
+2. **Autenticação** - login simples
+3. **Visualização de Livros** - biblioteca pessoal dos livros gerados
+4. **Formulário de Criação** - gerar novo livro personalizado com upload de foto
+
+**Nota**: As API routes serão implementadas separadamente. Focar apenas no frontend/UI.
+
+---
+
+## Paleta de Cores
+
+- **Branco**: `#FFFFFF` - backgrounds principais
+- **Laranja**: `#FF6B35` - CTAs e destaques
+- **Azul**: `#004E89` - elementos secundários e texto
+- **Roxo**: `#7B2CBF` - acentos e hover states
+
+Configurar no Tailwind:
+```js
+colors: {
+  primary: '#FF6B35',    // laranja
+  secondary: '#004E89',  // azul
+  accent: '#7B2CBF',     // roxo
+  white: '#FFFFFF'
+}
+```
+
+---
+
+## Stack Técnico
+
+- Next.js 14+ (App Router)
+- Tailwind CSS
+- React Hook Form (formulários)
+- Context API (autenticação)
+
+---
+
+## Estrutura de Pastas
+
+```
+meu-conto/
+│
+├── app/
+│   ├── layout.js                    # Layout principal
+│   ├── page.js                      # Landing page
+│   │
+│   ├── login/
+│   │   └── page.js                  # Autenticação
+│   │
+│   └── livros/
+│       ├── page.js                  # Biblioteca (visualização)
+│       │
+│       ├── criar/
+│       │   └── page.js              # Formulário de criação
+│       │
+│       └── [id]/
+│           └── page.js              # Visualizador de livro específico
+│
+├── components/
+│   ├── layout/
+│   │   ├── Header.jsx
+│   │   └── Footer.jsx
+│   │
+│   ├── landing/
+│   │   ├── Hero.jsx
+│   │   ├── Features.jsx
+│   │   └── HowItWorks.jsx
+│   │
+│   ├── auth/
+│   │   └── LoginForm.jsx
+│   │
+│   ├── livros/
+│   │   ├── LivroCard.jsx
+│   │   ├── LivrosGrid.jsx
+│   │   ├── EmptyState.jsx
+│   │   └── CriarLivroForm.jsx
+│   │
+│   ├── visualizador/
+│   │   ├── LivroViewer.jsx
+│   │   └── LivroToolbar.jsx
+│   │
+│   └── ui/
+│       ├── Button.jsx
+│       ├── Input.jsx
+│       ├── Card.jsx
+│       ├── FileUpload.jsx
+│       └── Loading.jsx
+│
+├── context/
+│   └── AuthContext.jsx
+│
+├── hooks/
+│   ├── useAuth.js
+│   └── useLivros.js
+│
+├── public/
+│   └── images/
+│
+├── styles/
+│   └── globals.css
+│
+├── .gitignore
+├── next.config.js
+├── package.json
+├── tailwind.config.js
+└── README.md
+```
+
+---
+
+## Páginas Detalhadas
+
+### 1. Landing Page (`/`)
+
+**Design e conteúdo:**
+
+- **Header**
+  - Logo "Meu Conto" (texto estilizado ou SVG simples)
+  - Botão "Entrar" (cor laranja, vai para /login)
+
+- **Hero Section**
+  - Título grande e chamativo: "Crie Livros Mágicos Personalizados para Crianças"
+  - Subtítulo: "Histórias únicas com o nome do seu filho, geradas por inteligência artificial em minutos"
+  - CTA laranja destaque: "Criar Meu Primeiro Livro"
+  - Imagem ilustrativa (pode usar ícone de livro ou placeholder colorido)
+
+- **Features Section** (3 cards lado a lado, responsivo)
+  - **Card 1**: 
+    - Ícone: ✨
+    - Título: "100% Personalizado"
+    - Descrição: "O nome da criança como protagonista da aventura"
+  - **Card 2**: 
+    - Ícone: 🎨
+    - Título: "Ilustrações com IA"
+    - Descrição: "Imagens únicas geradas para cada história"
+  - **Card 3**: 
+    - Ícone: ⚡
+    - Título: "Rápido e Fácil"
+    - Descrição: "Seu livro personalizado pronto em minutos"
+
+- **Como Funciona** (4 passos numerados)
+  1. 📝 Preencha o formulário com informações da criança
+  2. 📸 Adicione uma foto (opcional)
+  3. 🎭 Escolha o tema da aventura
+  4. 📚 Receba seu livro personalizado
+
+- **CTA Final**
+  - Seção colorida (fundo azul claro)
+  - Texto: "Pronto para criar uma história mágica?"
+  - Botão grande laranja: "Começar Agora"
+
+- **Footer**
+  - Links básicos (Sobre, Contato, Privacidade)
+  - Copyright "© 2025 Meu Conto"
+
+**Design**: Colorido, amigável, com bastante espaçamento, ícones grandes e ilustrações infantis. Usar gradientes suaves.
+
+---
+
+### 2. Login (`/login`)
+
+**Layout:**
+- Página centralizada
+- Logo "Meu Conto" no topo
+- Card/box branco centralizado com sombra
+
+**Formulário:**
+- Título: "Entrar na sua conta"
+- Campo "Email ou usuário" (input)
+- Campo "Senha" (input password)
+- Botão laranja: "Entrar"
+- Validação básica (campos obrigatórios)
+- Mensagens de erro em vermelho abaixo dos campos
+
+**Credenciais de teste:**
+- Usuário: `teste`
+- Senha: `teste123`
+
+**Comportamento:**
+- Ao fazer login com sucesso, salvar token no localStorage/context
+- Redirecionar para `/livros`
+- Se credenciais inválidas, mostrar erro
+
+**Design**: Clean, simples, profissional mas com cores amigáveis
+
+---
+
+### 3. Visualização de Livros (`/livros`)
+
+**Header:**
+- Logo "Meu Conto" (clicável, volta para landing)
+- Nome do usuário: "Olá, Teste!"
+- Botão "Sair" (limpa sessão, volta para landing)
+
+**Conteúdo Principal:**
+
+- **Título da página**: "Minha Biblioteca Mágica" (ou similar)
+
+- **Botão de Criação** (destaque máximo):
+  - Ícone: ✨
+  - Texto: "Criar Novo Livro"
+  - Cor: Laranja
+  - Grande, centralizado no topo
+  - Leva para `/livros/criar`
+
+- **Grid de Livros**
+  - Layout: 3 colunas em desktop, 2 em tablet, 1 em mobile
+  - Cada card (`LivroCard`) mostra:
+    - Área de thumbnail/capa (placeholder colorido se não houver imagem)
+    - Título do livro (bold)
+    - Data de criação (texto pequeno, cinza)
+    - Botão "Ver Livro" (azul)
+  - Ao clicar no card completo ou no botão, vai para `/livros/[id]`
+
+- **Estado Vazio** (`EmptyState`):
+  - Mostrar quando array de livros está vazio
+  - Ícone grande de livro aberto (📖)
+  - Texto: "Você ainda não criou nenhum livro mágico"
+  - Subtexto: "Que tal começar sua primeira aventura?"
+  - Botão laranja: "Criar Meu Primeiro Livro"
+
+**Design**: Grid espaçado, cards com hover effect, cores vibrantes
+
+**Proteção**: Verificar autenticação, se não estiver logado redirecionar para `/login`
+
+---
+
+### 4. Formulário de Criação (`/livros/criar`)
+
+**Header**: Igual à página de livros
+
+**Layout:**
+- Container centralizado (max-width)
+- Título: "✨ Criar Novo Livro Personalizado"
+- Subtítulo: "Preencha os campos abaixo e crie uma história única"
+
+**Formulário (componente `CriarLivroForm`):**
+
+**Seção 1: Informações do Personagem**
+- Label: "Sobre o Personagem Principal"
+- Campo: Nome completo (input text, obrigatório)
+  - Placeholder: "Ex: Maria Silva"
+- Campo: Idade (number input, 3-12, obrigatório)
+- Campo: Gênero (select/radio buttons)
+  - Opções: Masculino / Feminino / Neutro
+
+**Seção 2: Foto do Personagem**
+- Label: "Foto do Personagem (opcional)"
+- Componente `FileUpload`:
+  - Área de drag & drop
+  - Texto: "Arraste uma foto ou clique para selecionar"
+  - Preview da imagem quando selecionada
+  - Botão "Remover" se tiver imagem
+  - Aceita: jpg, png, jpeg (max 5MB)
+  - Validação de tamanho/tipo
+- Texto auxiliar: "A foto ajuda a IA a personalizar as ilustrações!"
+
+**Seção 3: Tema da Aventura**
+- Label: "Escolha o Tema da Aventura"
+- Cards/botões grandes com ícones (radio buttons estilizados):
+  - 🚀 Aventura Espacial
+  - 🌳 Floresta Mágica
+  - 🌊 Fundo do Mar
+  - 🏰 Reino Encantado
+  - 🦖 Era dos Dinossauros
+  - 🎪 Circo Fantástico
+- Design: Grid 2x3, hover effect, selecionar destaca com borda laranja
+
+**Seção 4: Detalhes Personalizados**
+- Campo: Cor favorita (color picker ou select colorido)
+  - Opções: Vermelho, Azul, Verde, Rosa, Amarelo, Roxo
+- Campo: Animal preferido (input text)
+  - Placeholder: "Ex: Cachorro, Gato, Unicórnio..."
+- Campo: Mensagem especial (textarea, opcional)
+  - Placeholder: "Adicione uma dedicatória ou mensagem especial..."
+  - Max 200 caracteres
+
+**Seção 5: Configurações do Livro**
+- Label: "Número de Páginas"
+- Range slider: 5 a 15 páginas
+- Mostrar valor selecionado: "10 páginas"
+
+**Botões de Ação:**
+- Botão Principal (laranja, grande): "🎨 Gerar Meu Livro"
+  - Loading state: Spinner + "Criando seu livro mágico..."
+  - Desabilitar durante submit
+- Botão Secundário (outline): "Cancelar"
+  - Volta para `/livros`
+
+**Validação:**
+- Nome: obrigatório, mín 2 caracteres
+- Idade: obrigatório, entre 3-12
+- Tema: obrigatório
+- Outros campos: opcionais
+
+**Comportamento ao Submit:**
+- Validar todos os campos
+- Converter foto para base64 (se houver)
+- Preparar FormData/objeto com todos os dados
+- Mostrar loading state
+- Simular envio (console.log dos dados por enquanto)
+- Após "sucesso", redirecionar para `/livros` com mensagem de sucesso
+- Se erro, mostrar mensagem de erro
+
+**Design**: Formulário espaçado, seções bem divididas, ícones coloridos, labels claras, campos grandes e amigáveis
+
+---
+
+### 5. Visualizador de Livro (`/livros/[id]`)
+
+**Layout:**
+
+**Toolbar Superior** (`LivroToolbar`)
+- Botão: "← Voltar para Biblioteca" (esquerda)
+- Título do livro centralizado (bold, cor azul)
+- Espaço para ações futuras (direita)
+
+**Área de Visualização** (`LivroViewer`)
+- Container centralizado (max-width: 800px)
+- Background branco
+- Sombra suave ao redor
+- Padding interno
+- Iframe renderizando HTML do livro:
+  ```jsx
+  <iframe 
+    srcDoc={htmlContent}
+    sandbox="allow-same-origin"
+    className="w-full h-screen border-0"
+  />
+  ```
+
+**Navegação entre Páginas** (se aplicável):
+- Botões fixos no fundo ou laterais
+- "← Anterior" | "Próxima →"
+- Indicador no centro: "Página 3 de 10"
+- Desabilitar "Anterior" na primeira página
+- Desabilitar "Próxima" na última página
+
+**Estado de Carregamento:**
+- Mostrar `Loading` component enquanto busca o livro
+- Skeleton ou spinner
+
+**Comportamento:**
+- Buscar livro pelo ID da URL
+- Renderizar HTML de forma segura
+- Se livro não encontrado, mostrar mensagem de erro
+- Botão para voltar à biblioteca sempre visível
+
+**Design**: Clean, foco no conteúdo do livro, controles discretos mas acessíveis
+
+---
+
+## Componentes UI Reutilizáveis
+
+### `Button.jsx`
+- Variantes: primary (laranja), secondary (azul), outline
+- Tamanhos: sm, md, lg
+- Estados: default, hover, disabled, loading
+- Props: variant, size, loading, disabled, onClick, children
+
+### `Input.jsx`
+- Suporta: text, password, number, email
+- Label opcional
+- Error message
+- Placeholder
+- Required indicator
+
+### `Card.jsx`
+- Container com padding, border-radius, shadow
+- Hover effect opcional
+- Variantes de cor
+
+### `FileUpload.jsx`
+- Drag & drop area
+- Click to upload
+- Preview da imagem
+- Validação de tipo e tamanho
+- Botão remover
+- Estados: empty, uploading, uploaded, error
+
+### `Loading.jsx`
+- Spinner animado
+- Texto opcional
+- Centralizado
+
+---
+
+## Context API - Autenticação
+
+**`AuthContext.jsx`:**
+```jsx
+// Gerenciar estado global de autenticação
+// - user (objeto do usuário logado ou null)
+// - token (JWT)
+// - login(credentials)
+// - logout()
+// - isAuthenticated (boolean)
+
+// Persistir em localStorage
+// Provider envolvendo toda aplicação
+```
+
+**`useAuth.js` hook:**
+```jsx
+// Hook para consumir AuthContext
+// Retorna: { user, login, logout, isAuthenticated }
+```
+
+---
+
+## Hooks Customizados
+
+### `useLivros.js`
+```jsx
+// Gerenciar lista de livros do usuário
+// - livros (array)
+// - loading
+// - error
+// - fetchLivros()
+// - getLivroById(id)
+
+// Por enquanto pode usar dados mockados
+```
+
+---
+
+## Dados Mockados (Temporário)
+
+Para desenvolvimento, usar dados de exemplo:
+
+```javascript
+// Livros mockados
+const livrosMock = [
+  {
+    id: 1,
+    titulo: "A Aventura de João no Espaço",
+    created_at: "2025-01-15",
+    thumbnail: null
+  },
+  {
+    id: 2,
+    titulo: "Maria e a Floresta Encantada",
+    created_at: "2025-01-20",
+    thumbnail: null
+  }
+];
+
+// HTML de livro mockado
+const livroHtmlMock = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      font-family: 'Comic Sans MS', cursive;
+      padding: 40px;
+      background: #f0f8ff;
+    }
+    h1 { color: #FF6B35; }
+    p { font-size: 18px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <h1>A Aventura de João no Espaço</h1>
+  <p>Era uma vez um menino chamado João que adorava olhar para as estrelas...</p>
+  <p>Um dia, ele encontrou uma nave espacial no quintal...</p>
+</body>
+</html>
+`;
+```
+
+---
+
+## Dependências
+
+```json
+{
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hook-form": "^7.49.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0"
+  }
+}
+```
+
+---
+
+## Configuração Tailwind
+
+```js
+// tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+    './app/**/*.{js,jsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#FF6B35',
+        secondary: '#004E89',
+        accent: '#7B2CBF',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}
+```
+
+---
+
+## Instruções para Implementação
+
+1. **Criar projeto Next.js** com App Router
+2. **Instalar dependências** (Tailwind, react-hook-form)
+3. **Configurar Tailwind** com paleta de cores
+4. **Criar componentes UI básicos** (Button, Input, Card, Loading, FileUpload)
+5. **Criar AuthContext** e hook useAuth
+6. **Implementar páginas na ordem**:
+   - Landing page (componentes Hero, Features, HowItWorks)
+   - Login (LoginForm component)
+   - Visualização de livros (LivrosGrid, LivroCard, EmptyState)
+   - Formulário de criação (CriarLivroForm com todas as seções)
+   - Visualizador (LivroViewer, LivroToolbar)
+7. **Usar dados mockados** para desenvolvimento
+8. **Implementar navegação** entre páginas
+9. **Adicionar proteção de rotas** (verificar autenticação)
+10. **Testar responsividade** em diferentes tamanhos de tela
+
+---
+
+## Design Guidelines
+
+- **Tipografia**: Usar fontes amigáveis (Inter, Poppins, ou similar)
+- **Espaçamento**: Generoso, respiração visual
+- **Bordas**: Border-radius de 8-12px em cards e botões
+- **Sombras**: Sutis, apenas para elevação
+- **Ícones**: Emojis grandes ou biblioteca como Lucide/Heroicons
+- **Animações**: Transições suaves em hovers e estados
+- **Cores**: Vibrantes mas harmoniosas, contraste suficiente para leitura
+- **Mobile-first**: Design responsivo desde o início
+
+---
+
+## Notas Importantes
+
+- **Foco no Frontend**: Não implementar APIs agora
+- **Dados Mockados**: Usar arrays estáticos por enquanto
+- **Validação Client-side**: React Hook Form para formulários
+- **Autenticação Simples**: Apenas verificar credentials hardcoded
+- **Loading States**: Em todas operações assíncronas
+- **Mensagens de Feedback**: Toast/alerts para sucesso e erro
+- **Acessibilidade**: Labels, alt texts, navegação por teclado
+
+---
+
+**Pronto para criar uma experiência mágica! 🎨✨**# Prompt para Claude Code - Meu Conto MVP
+
+## Descrição do Projeto
+
+**Meu Conto** é uma plataforma de geração automatizada de livros ilustrados infantis personalizados usando inteligência artificial.
+
+O usuário preenche um formulário com informações sobre a história desejada (nome do personagem, tema, idade, etc.) e o sistema gera automaticamente um livro infantil completo em HTML com narrativa e ilustrações criadas por IA.
+
+**Este NÃO é um gerenciador de biblioteca virtual** - é um gerador de conteúdo personalizado onde cada livro é criado do zero pela plataforma.
+
+---
+
+## Objetivo
+
+Criar aplicação Next.js 14+ (App Router) com as seguintes páginas:
+1. **Landing Page** - apresentação do produto
+2. **Autenticação** - login simples
+3. **Visualização de Livros** - biblioteca pessoal dos livros gerados
+4. **Formulário de Criação** - gerar novo livro personalizado com upload de foto
+
+**Nota**: As API routes serão implementadas separadamente. Focar apenas no frontend/UI.
+
+---
+
+## Paleta de Cores
+
+- **Branco**: `#FFFFFF` - backgrounds principais
+- **Laranja**: `#FF6B35` - CTAs e destaques
+- **Azul**: `#004E89` - elementos secundários e texto
+- **Roxo**: `#7B2CBF` - acentos e hover states
+
+Configurar no Tailwind:
+```js
+colors: {
+  primary: '#FF6B35',    // laranja
+  secondary: '#004E89',  // azul
+  accent: '#7B2CBF',     // roxo
+  white: '#FFFFFF'
+}
+```
+
+---
+
+## Stack Técnico
+
+- Next.js 14+ (App Router)
+- Tailwind CSS
+- React Hook Form (formulários)
+- Context API (autenticação)
+
+---
+
+## Estrutura de Pastas
+
+```
+meu-conto/
+│
+├── app/
+│   ├── layout.js                    # Layout principal
+│   ├── page.js                      # Landing page
+│   │
+│   ├── login/
+│   │   └── page.js                  # Autenticação
+│   │
+│   └── livros/
+│       ├── page.js                  # Biblioteca (visualização)
+│       │
+│       ├── criar/
+│       │   └── page.js              # Formulário de criação
+│       │
+│       └── [id]/
+│           └── page.js              # Visualizador de livro específico
+│
+├── components/
+│   ├── layout/
+│   │   ├── Header.jsx
+│   │   └── Footer.jsx
+│   │
+│   ├── landing/
+│   │   ├── Hero.jsx
+│   │   ├── Features.jsx
+│   │   └── HowItWorks.jsx
+│   │
+│   ├── auth/
+│   │   └── LoginForm.jsx
+│   │
+│   ├── livros/
+│   │   ├── LivroCard.jsx
+│   │   ├── LivrosGrid.jsx
+│   │   ├── EmptyState.jsx
+│   │   └── CriarLivroForm.jsx
+│   │
+│   ├── visualizador/
+│   │   ├── LivroViewer.jsx
+│   │   └── LivroToolbar.jsx
+│   │
+│   └── ui/
+│       ├── Button.jsx
+│       ├── Input.jsx
+│       ├── Card.jsx
+│       ├── FileUpload.jsx
+│       └── Loading.jsx
+│
+├── context/
+│   └── AuthContext.jsx
+│
+├── hooks/
+│   ├── useAuth.js
+│   └── useLivros.js
+│
+├── public/
+│   └── images/
+│
+├── styles/
+│   └── globals.css
+│
+├── .gitignore
+├── next.config.js
+├── package.json
+├── tailwind.config.js
+└── README.md
+```
+
+---
+
+## Páginas Detalhadas
+
+### 1. Landing Page (`/`)
+
+**Design e conteúdo:**
+
+- **Header**
+  - Logo "Meu Conto" (texto estilizado ou SVG simples)
+  - Botão "Entrar" (cor laranja, vai para /login)
+
+- **Hero Section**
+  - Título grande e chamativo: "Crie Livros Mágicos Personalizados para Crianças"
+  - Subtítulo: "Histórias únicas com o nome do seu filho, geradas por inteligência artificial em minutos"
+  - CTA laranja destaque: "Criar Meu Primeiro Livro"
+  - Imagem ilustrativa (pode usar ícone de livro ou placeholder colorido)
+
+- **Features Section** (3 cards lado a lado, responsivo)
+  - **Card 1**: 
+    - Ícone: ✨
+    - Título: "100% Personalizado"
+    - Descrição: "O nome da criança como protagonista da aventura"
+  - **Card 2**: 
+    - Ícone: 🎨
+    - Título: "Ilustrações com IA"
+    - Descrição: "Imagens únicas geradas para cada história"
+  - **Card 3**: 
+    - Ícone: ⚡
+    - Título: "Rápido e Fácil"
+    - Descrição: "Seu livro personalizado pronto em minutos"
+
+- **Como Funciona** (4 passos numerados)
+  1. 📝 Preencha o formulário com informações da criança
+  2. 📸 Adicione uma foto (opcional)
+  3. 🎭 Escolha o tema da aventura
+  4. 📚 Receba seu livro personalizado
+
+- **CTA Final**
+  - Seção colorida (fundo azul claro)
+  - Texto: "Pronto para criar uma história mágica?"
+  - Botão grande laranja: "Começar Agora"
+
+- **Footer**
+  - Links básicos (Sobre, Contato, Privacidade)
+  - Copyright "© 2025 Meu Conto"
+
+**Design**: Colorido, amigável, com bastante espaçamento, ícones grandes e ilustrações infantis. Usar gradientes suaves.
+
+---
+
+### 2. Login (`/login`)
+
+**Layout:**
+- Página centralizada
+- Logo "Meu Conto" no topo
+- Card/box branco centralizado com sombra
+
+**Formulário:**
+- Título: "Entrar na sua conta"
+- Campo "Email ou usuário" (input)
+- Campo "Senha" (input password)
+- Botão laranja: "Entrar"
+- Validação básica (campos obrigatórios)
+- Mensagens de erro em vermelho abaixo dos campos
+
+**Credenciais de teste:**
+- Usuário: `teste`
+- Senha: `teste123`
+
+**Comportamento:**
+- Ao fazer login com sucesso, salvar token no localStorage/context
+- Redirecionar para `/livros`
+- Se credenciais inválidas, mostrar erro
+
+**Design**: Clean, simples, profissional mas com cores amigáveis
+
+---
+
+### 3. Visualização de Livros (`/livros`)
+
+**Header:**
+- Logo "Meu Conto" (clicável, volta para landing)
+- Nome do usuário: "Olá, Teste!"
+- Botão "Sair" (limpa sessão, volta para landing)
+
+**Conteúdo Principal:**
+
+- **Título da página**: "Minha Biblioteca Mágica" (ou similar)
+
+- **Botão de Criação** (destaque máximo):
+  - Ícone: ✨
+  - Texto: "Criar Novo Livro"
+  - Cor: Laranja
+  - Grande, centralizado no topo
+  - Leva para `/livros/criar`
+
+- **Grid de Livros**
+  - Layout: 3 colunas em desktop, 2 em tablet, 1 em mobile
+  - Cada card (`LivroCard`) mostra:
+    - Área de thumbnail/capa (placeholder colorido se não houver imagem)
+    - Título do livro (bold)
+    - Data de criação (texto pequeno, cinza)
+    - Botão "Ver Livro" (azul)
+  - Ao clicar no card completo ou no botão, vai para `/livros/[id]`
+
+- **Estado Vazio** (`EmptyState`):
+  - Mostrar quando array de livros está vazio
+  - Ícone grande de livro aberto (📖)
+  - Texto: "Você ainda não criou nenhum livro mágico"
+  - Subtexto: "Que tal começar sua primeira aventura?"
+  - Botão laranja: "Criar Meu Primeiro Livro"
+
+**Design**: Grid espaçado, cards com hover effect, cores vibrantes
+
+**Proteção**: Verificar autenticação, se não estiver logado redirecionar para `/login`
+
+---
+
+### 4. Formulário de Criação (`/livros/criar`)
+
+**Header**: Igual à página de livros
+
+**Layout:**
+- Container centralizado (max-width)
+- Título: "✨ Criar Novo Livro Personalizado"
+- Subtítulo: "Preencha os campos abaixo e crie uma história única"
+
+**Formulário (componente `CriarLivroForm`):**
+
+**Seção 1: Informações do Personagem**
+- Label: "Sobre o Personagem Principal"
+- Campo: Nome completo (input text, obrigatório)
+  - Placeholder: "Ex: Maria Silva"
+- Campo: Idade (number input, 3-12, obrigatório)
+- Campo: Gênero (select/radio buttons)
+  - Opções: Masculino / Feminino / Neutro
+
+**Seção 2: Foto do Personagem**
+- Label: "Foto do Personagem (opcional)"
+- Componente `FileUpload`:
+  - Área de drag & drop
+  - Texto: "Arraste uma foto ou clique para selecionar"
+  - Preview da imagem quando selecionada
+  - Botão "Remover" se tiver imagem
+  - Aceita: jpg, png, jpeg (max 5MB)
+  - Validação de tamanho/tipo
+- Texto auxiliar: "A foto ajuda a IA a personalizar as ilustrações!"
+
+**Seção 3: Tema da Aventura**
+- Label: "Escolha o Tema da Aventura"
+- Cards/botões grandes com ícones (radio buttons estilizados):
+  - 🚀 Aventura Espacial
+  - 🌳 Floresta Mágica
+  - 🌊 Fundo do Mar
+  - 🏰 Reino Encantado
+  - 🦖 Era dos Dinossauros
+  - 🎪 Circo Fantástico
+- Design: Grid 2x3, hover effect, selecionar destaca com borda laranja
+
+**Seção 4: Detalhes Personalizados**
+- Campo: Cor favorita (color picker ou select colorido)
+  - Opções: Vermelho, Azul, Verde, Rosa, Amarelo, Roxo
+- Campo: Animal preferido (input text)
+  - Placeholder: "Ex: Cachorro, Gato, Unicórnio..."
+- Campo: Mensagem especial (textarea, opcional)
+  - Placeholder: "Adicione uma dedicatória ou mensagem especial..."
+  - Max 200 caracteres
+
+**Seção 5: Configurações do Livro**
+- Label: "Número de Páginas"
+- Range slider: 5 a 15 páginas
+- Mostrar valor selecionado: "10 páginas"
+
+**Botões de Ação:**
+- Botão Principal (laranja, grande): "🎨 Gerar Meu Livro"
+  - Loading state: Spinner + "Criando seu livro mágico..."
+  - Desabilitar durante submit
+- Botão Secundário (outline): "Cancelar"
+  - Volta para `/livros`
+
+**Validação:**
+- Nome: obrigatório, mín 2 caracteres
+- Idade: obrigatório, entre 3-12
+- Tema: obrigatório
+- Outros campos: opcionais
+
+**Comportamento ao Submit:**
+- Validar todos os campos
+- Converter foto para base64 (se houver)
+- Preparar FormData/objeto com todos os dados
+- Mostrar loading state
+- Simular envio (console.log dos dados por enquanto)
+- Após "sucesso", redirecionar para `/livros` com mensagem de sucesso
+- Se erro, mostrar mensagem de erro
+
+**Design**: Formulário espaçado, seções bem divididas, ícones coloridos, labels claras, campos grandes e amigáveis
+
+---
+
+### 5. Visualizador de Livro (`/livros/[id]`)
+
+**Layout:**
+
+**Toolbar Superior** (`LivroToolbar`)
+- Botão: "← Voltar para Biblioteca" (esquerda)
+- Título do livro centralizado (bold, cor azul)
+- Espaço para ações futuras (direita)
+
+**Área de Visualização** (`LivroViewer`)
+- Container centralizado (max-width: 800px)
+- Background branco
+- Sombra suave ao redor
+- Padding interno
+- Iframe renderizando HTML do livro:
+  ```jsx
+  <iframe 
+    srcDoc={htmlContent}
+    sandbox="allow-same-origin"
+    className="w-full h-screen border-0"
+  />
+  ```
+
+**Navegação entre Páginas** (se aplicável):
+- Botões fixos no fundo ou laterais
+- "← Anterior" | "Próxima →"
+- Indicador no centro: "Página 3 de 10"
+- Desabilitar "Anterior" na primeira página
+- Desabilitar "Próxima" na última página
+
+**Estado de Carregamento:**
+- Mostrar `Loading` component enquanto busca o livro
+- Skeleton ou spinner
+
+**Comportamento:**
+- Buscar livro pelo ID da URL
+- Renderizar HTML de forma segura
+- Se livro não encontrado, mostrar mensagem de erro
+- Botão para voltar à biblioteca sempre visível
+
+**Design**: Clean, foco no conteúdo do livro, controles discretos mas acessíveis
+
+---
+
+## Componentes UI Reutilizáveis
+
+### `Button.jsx`
+- Variantes: primary (laranja), secondary (azul), outline
+- Tamanhos: sm, md, lg
+- Estados: default, hover, disabled, loading
+- Props: variant, size, loading, disabled, onClick, children
+
+### `Input.jsx`
+- Suporta: text, password, number, email
+- Label opcional
+- Error message
+- Placeholder
+- Required indicator
+
+### `Card.jsx`
+- Container com padding, border-radius, shadow
+- Hover effect opcional
+- Variantes de cor
+
+### `FileUpload.jsx`
+- Drag & drop area
+- Click to upload
+- Preview da imagem
+- Validação de tipo e tamanho
+- Botão remover
+- Estados: empty, uploading, uploaded, error
+
+### `Loading.jsx`
+- Spinner animado
+- Texto opcional
+- Centralizado
+
+---
+
+## Context API - Autenticação
+
+**`AuthContext.jsx`:**
+```jsx
+// Gerenciar estado global de autenticação
+// - user (objeto do usuário logado ou null)
+// - token (JWT)
+// - login(credentials)
+// - logout()
+// - isAuthenticated (boolean)
+
+// Persistir em localStorage
+// Provider envolvendo toda aplicação
+```
+
+**`useAuth.js` hook:**
+```jsx
+// Hook para consumir AuthContext
+// Retorna: { user, login, logout, isAuthenticated }
+```
+
+---
+
+## Hooks Customizados
+
+### `useLivros.js`
+```jsx
+// Gerenciar lista de livros do usuário
+// - livros (array)
+// - loading
+// - error
+// - fetchLivros()
+// - getLivroById(id)
+
+// Por enquanto pode usar dados mockados
+```
+
+---
+
+## Dados Mockados (Temporário)
+
+Para desenvolvimento, usar dados de exemplo:
+
+```javascript
+// Livros mockados
+const livrosMock = [
+  {
+    id: 1,
+    titulo: "A Aventura de João no Espaço",
+    created_at: "2025-01-15",
+    thumbnail: null
+  },
+  {
+    id: 2,
+    titulo: "Maria e a Floresta Encantada",
+    created_at: "2025-01-20",
+    thumbnail: null
+  }
+];
+
+// HTML de livro mockado
+const livroHtmlMock = `
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { 
+      font-family: 'Comic Sans MS', cursive;
+      padding: 40px;
+      background: #f0f8ff;
+    }
+    h1 { color: #FF6B35; }
+    p { font-size: 18px; line-height: 1.6; }
+  </style>
+</head>
+<body>
+  <h1>A Aventura de João no Espaço</h1>
+  <p>Era uma vez um menino chamado João que adorava olhar para as estrelas...</p>
+  <p>Um dia, ele encontrou uma nave espacial no quintal...</p>
+</body>
+</html>
+`;
+```
+
+---
+
+## Dependências
+
+```json
+{
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-hook-form": "^7.49.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0"
+  }
+}
+```
+
+---
+
+## Configuração Tailwind
+
+```js
+// tailwind.config.js
+module.exports = {
+  content: [
+    './pages/**/*.{js,jsx}',
+    './components/**/*.{js,jsx}',
+    './app/**/*.{js,jsx}',
+  ],
+  theme: {
+    extend: {
+      colors: {
+        primary: '#FF6B35',
+        secondary: '#004E89',
+        accent: '#7B2CBF',
+      },
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
+    },
+  },
+  plugins: [],
+}
+```
+
+---
+
+## Instruções para Implementação
+
+1. **Criar projeto Next.js** com App Router
+2. **Instalar dependências** (Tailwind, react-hook-form)
+3. **Configurar Tailwind** com paleta de cores
+4. **Criar componentes UI básicos** (Button, Input, Card, Loading, FileUpload)
+5. **Criar AuthContext** e hook useAuth
+6. **Implementar páginas na ordem**:
+   - Landing page (componentes Hero, Features, HowItWorks)
+   - Login (LoginForm component)
+   - Visualização de livros (LivrosGrid, LivroCard, EmptyState)
+   - Formulário de criação (CriarLivroForm com todas as seções)
+   - Visualizador (LivroViewer, LivroToolbar)
+7. **Usar dados mockados** para desenvolvimento
+8. **Implementar navegação** entre páginas
+9. **Adicionar proteção de rotas** (verificar autenticação)
+10. **Testar responsividade** em diferentes tamanhos de tela
+
+---
+
+## Design Guidelines
+
+- **Tipografia**: Usar fontes amigáveis (Inter, Poppins, ou similar)
+- **Espaçamento**: Generoso, respiração visual
+- **Bordas**: Border-radius de 8-12px em cards e botões
+- **Sombras**: Sutis, apenas para elevação
+- **Ícones**: Emojis grandes ou biblioteca como Lucide/Heroicons
+- **Animações**: Transições suaves em hovers e estados
+- **Cores**: Vibrantes mas harmoniosas, contraste suficiente para leitura
+- **Mobile-first**: Design responsivo desde o início
+
+---
+
+## Notas Importantes
+
+- **Foco no Frontend**: Não implementar APIs agora
+- **Dados Mockados**: Usar arrays estáticos por enquanto
+- **Validação Client-side**: React Hook Form para formulários
+- **Autenticação Simples**: Apenas verificar credentials hardcoded
+- **Loading States**: Em todas operações assíncronas
+- **Mensagens de Feedback**: Toast/alerts para sucesso e erro
+- **Acessibilidade**: Labels, alt texts, navegação por teclado
+
+---
+
+**Pronto para criar uma experiência mágica! 🎨✨**
